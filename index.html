@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ahavah Nails Studio</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Montserrat:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        baby:   { DEFAULT:'#D6EAF8', light:'#EBF5FB', dark:'#A9CCE3', deep:'#5DADE2' },
+        gold:   { DEFAULT:'#C9A84C', light:'#E8C96A', bright:'#F5E070', dark:'#A07830' },
+        navy:   { DEFAULT:'#0D1B2A', mid:'#1A2F45', light:'#243B55' },
+        cream:  '#FAFCFE',
+        slate:  '#4A6FA5',
+      },
+      fontFamily: {
+        display: ['Playfair Display','Georgia','serif'],
+        sans:    ['Montserrat','sans-serif'],
+        serif:   ['Cormorant Garamond','Georgia','serif'],
+      },
+    }
+  }
+}
+</script>
+
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { font-family:'Montserrat',sans-serif; font-weight:300; background:#FAFCFE; color:#0D1B2A; overflow-x:hidden; cursor:none; }
+
+  /* ── GOLD SHIMMER ── */
+  .gold-text {
+    background: linear-gradient(90deg, #A07830 0%, #C9A84C 25%, #F5E070 50%, #E8C96A 70%, #C9A84C 85%, #A07830 100%);
+    background-size: 300% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 4s linear infinite;
+  }
+  @keyframes shimmer { 0%{background-position:0% center} 100%{background-position:300% center} }
+
+  .gold-text-slow {
+    background: linear-gradient(90deg, #A07830 0%, #C9A84C 25%, #F5E070 50%, #E8C96A 70%, #C9A84C 85%, #A07830 100%);
+    background-size: 300% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 7s linear infinite;
+  }
+
+  /* ── LOADER ── */
+  #loader {
+    position:fixed; inset:0; z-index:10000;
+    background: radial-gradient(ellipse at center, #1A2F45 0%, #0D1B2A 100%);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1.4rem;
+    transition: opacity .9s ease, visibility .9s ease;
+  }
+  #loader.hidden { opacity:0; visibility:hidden; }
+  .loader-logo-img { width:160px; height:160px; object-fit:contain; animation: float-logo 2s ease-in-out infinite; filter: drop-shadow(0 0 20px rgba(201,168,76,.4)); }
+  @keyframes float-logo { 0%,100%{transform:translateY(0) scale(.97)} 50%{transform:translateY(-10px) scale(1)} }
+  .loader-name { font-family:'Playfair Display',serif; font-size:2.2rem; font-weight:400; letter-spacing:.35em; text-transform:uppercase; }
+  .loader-sub { font-family:'Montserrat',sans-serif; font-size:.65rem; letter-spacing:.4em; text-transform:uppercase; color:rgba(213,197,140,.45); }
+  .loader-bar { width:160px; height:1px; background:rgba(201,168,76,.15); position:relative; overflow:hidden; }
+  .loader-bar::after { content:''; position:absolute; left:-100%; top:0; width:100%; height:100%; background:linear-gradient(90deg,transparent,#E8C96A,transparent); animation:bar-fill 2s ease forwards; }
+  @keyframes bar-fill { 0%{left:-100%} 100%{left:100%} }
+
+  /* ── CURSOR ── */
+  #cursor { position:fixed; width:10px; height:10px; background:#C9A84C; border-radius:50%; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); transition:width .2s,height .2s; mix-blend-mode:normal; }
+  #cursor-ring { position:fixed; width:32px; height:32px; border:1px solid rgba(201,168,76,.5); border-radius:50%; pointer-events:none; z-index:9998; transform:translate(-50%,-50%); opacity:.7; }
+  .glitter { position:fixed; pointer-events:none; z-index:9997; animation:gf .9s ease-out forwards; }
+  @keyframes gf { 0%{opacity:1;transform:scale(1) translateY(0) rotate(0deg)} 100%{opacity:0;transform:scale(0) translateY(-25px) rotate(180deg)} }
+
+  /* ── NAV ── */
+  #main-nav {
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    transition: all .5s cubic-bezier(.4,0,.2,1);
+    padding: 1.4rem 3rem;
+  }
+  #main-nav.scrolled {
+    padding: .8rem 3rem;
+    background: rgba(250,252,254,.97);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 1px 0 rgba(169,204,227,.25), 0 4px 20px rgba(13,27,42,.06);
+  }
+  #main-nav.nav-dark .nav-logo-text { color: rgba(255,255,255,.9); }
+  #main-nav.nav-dark .nav-link { color: rgba(255,255,255,.7); }
+  #main-nav.nav-dark .nav-link:hover { color: #E8C96A; }
+  #main-nav.nav-light .nav-logo-text { color: #1A2F45; }
+  #main-nav.nav-light .nav-link { color: #4A6FA5; }
+  #main-nav.nav-light .nav-link:hover { color: #C9A84C; }
+  .nav-logo-img { width:38px; height:38px; object-fit:contain; transition:filter .5s; }
+  #main-nav.nav-dark .nav-logo-img { filter:brightness(0) invert(1) drop-shadow(0 0 6px rgba(232,201,106,.4)); }
+  #main-nav.nav-light .nav-logo-img { filter:drop-shadow(0 0 4px rgba(201,168,76,.3)); }
+  .nav-logo-text { font-family:'Playfair Display',serif; font-size:1.35rem; letter-spacing:.18em; transition:color .5s; }
+  .nav-link { font-size:.72rem; letter-spacing:.18em; text-transform:uppercase; transition:color .3s; text-decoration:none; }
+  .nav-cta {
+    font-size:.72rem; letter-spacing:.18em; text-transform:uppercase;
+    padding:.55rem 1.5rem; border-radius:2px;
+    background: linear-gradient(135deg, #C9A84C, #E8C96A);
+    color: #0D1B2A !important;
+    font-weight: 500;
+    box-shadow: 0 4px 15px rgba(201,168,76,.35);
+    transition: box-shadow .3s, transform .2s;
+    cursor: none;
+  }
+  .nav-cta:hover { box-shadow:0 6px 24px rgba(201,168,76,.5); transform:translateY(-1px); }
+
+  /* ── HERO ── */
+  .hero {
+    position:relative; min-height:100vh;
+    background: linear-gradient(135deg, #0D1B2A 0%, #162638 35%, #1E3A52 65%, #0D2035 100%);
+    display:flex; align-items:center; overflow:hidden;
+  }
+  /* Partículas decorativas */
+  .hero-orb {
+    position:absolute; border-radius:50%;
+    filter:blur(80px); animation:orb-float 8s ease-in-out infinite;
+  }
+  .orb1 { width:500px; height:500px; background:rgba(93,173,226,.08); top:-100px; right:-100px; animation-delay:0s; }
+  .orb2 { width:350px; height:350px; background:rgba(201,168,76,.07); bottom:-80px; left:10%; animation-delay:3s; }
+  .orb3 { width:250px; height:250px; background:rgba(93,173,226,.06); top:30%; left:50%; animation-delay:5s; }
+  @keyframes orb-float { 0%,100%{transform:translateY(0) scale(1)} 50%{transform:translateY(-30px) scale(1.05)} }
+  /* Líneas decorativas */
+  .hero-lines { position:absolute; inset:0; overflow:hidden; opacity:.06; }
+  .hero-line { position:absolute; background:linear-gradient(to bottom,transparent,#B8D4E8,transparent); width:1px; }
+  .hl1{left:20%;height:100%;top:0;animation:line-pulse 4s ease-in-out infinite;}
+  .hl2{left:40%;height:80%;top:10%;animation:line-pulse 4s ease-in-out 1s infinite;}
+  .hl3{left:60%;height:90%;top:5%;animation:line-pulse 4s ease-in-out 2s infinite;}
+  .hl4{left:80%;height:70%;top:15%;animation:line-pulse 4s ease-in-out .5s infinite;}
+  @keyframes line-pulse { 0%,100%{opacity:.3} 50%{opacity:1} }
+  /* Partículas flotantes doradas */
+  .hero-particle { position:absolute; border-radius:50%; animation:particle-float linear infinite; }
+  @keyframes particle-float { 0%{transform:translateY(100vh) rotate(0deg);opacity:0} 10%{opacity:1} 90%{opacity:1} 100%{transform:translateY(-100px) rotate(720deg);opacity:0} }
+
+  /* ── RIBBON ── */
+  .ribbon-wrap { background:linear-gradient(90deg,#0D1B2A,#1A3048,#0D1B2A); border-top:1px solid rgba(201,168,76,.2); border-bottom:1px solid rgba(201,168,76,.2); }
+  .ribbon-track { display:flex; gap:3rem; width:max-content; animation:scroll-left 28s linear infinite; padding:.9rem 0; }
+  .ribbon-item { font-size:.68rem; letter-spacing:.28em; text-transform:uppercase; color:rgba(184,212,232,.6); white-space:nowrap; display:flex; align-items:center; gap:1.5rem; }
+  .ribbon-item::after { content:'◆'; color:#C9A84C; font-size:.45rem; }
+  @keyframes scroll-left { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+  /* ── SECTION LABEL ── */
+  .sec-label {
+    font-size:.68rem; letter-spacing:.35em; text-transform:uppercase;
+    color:#C9A84C; display:flex; align-items:center; gap:.8rem; margin-bottom:1rem;
+  }
+  .sec-label::before { content:''; width:30px; height:1px; background:linear-gradient(90deg,#C9A84C,#E8C96A); }
+
+  /* ── WHY CARDS ── */
+  .why-card {
+    background:white; border-radius:12px; overflow:hidden;
+    box-shadow: 0 2px 20px rgba(13,27,42,.06);
+    border:1px solid rgba(169,204,227,.2);
+    transition: transform .4s cubic-bezier(.34,1.56,.64,1), box-shadow .4s;
+  }
+  .why-card:hover { transform:translateY(-8px); box-shadow:0 20px 50px rgba(13,27,42,.12), 0 0 0 1px rgba(201,168,76,.15); }
+  .why-img-ph { height:220px; display:flex; align-items:center; justify-content:center; font-size:3.5rem; }
+  .ph1 { background:linear-gradient(135deg,#B8D4E8 0%,#5DADE2 100%); }
+  .ph2 { background:linear-gradient(135deg,#1A2F45 0%,#243B55 100%); }
+  .ph3 { background:linear-gradient(135deg,#D6EAF8 0%,#A9CCE3 100%); }
+
+  /* ── FLIP CARDS ── */
+  .flip-card { height:300px; perspective:1200px; cursor:none; }
+  .flip-card-inner { position:relative; width:100%; height:100%; transform-style:preserve-3d; transition:transform .7s cubic-bezier(.4,0,.2,1); }
+  .flip-card:hover .flip-card-inner { transform:rotateY(180deg); }
+  .flip-front, .flip-back { position:absolute; inset:0; backface-visibility:hidden; border-radius:12px; padding:2rem; display:flex; flex-direction:column; justify-content:space-between; }
+  .flip-front { background:white; border:1px solid rgba(169,204,227,.25); box-shadow:0 2px 16px rgba(13,27,42,.06); }
+  .flip-back { background:linear-gradient(135deg,#0D1B2A 0%,#1A3048 100%); transform:rotateY(180deg); border:1px solid rgba(201,168,76,.2); justify-content:center; gap:.9rem; }
+  .flip-hint { font-size:.6rem; letter-spacing:.18em; text-transform:uppercase; color:#A9CCE3; }
+  .flip-hint::before { content:'↻ '; }
+  .svc-num { font-family:'Playfair Display',serif; font-size:.9rem; color:#A9CCE3; }
+  .svc-name-front { font-family:'Playfair Display',serif; font-size:1.3rem; font-weight:400; color:#0D1B2A; }
+  .svc-price-front { font-family:'Playfair Display',serif; font-size:1.5rem; color:#C9A84C; }
+  .svc-name-back { font-family:'Playfair Display',serif; font-size:1.2rem; font-weight:400; color:white; }
+  .svc-detail { font-size:.8rem; line-height:1.75; color:rgba(184,212,232,.72); }
+  .svc-price-back { font-family:'Playfair Display',serif; font-size:1.7rem; }
+  .svc-cta { font-size:.68rem; letter-spacing:.18em; text-transform:uppercase; color:#E8C96A; text-decoration:none; border-bottom:1px solid rgba(232,201,106,.3); padding-bottom:2px; align-self:flex-start; }
+
+  /* ── SPLIT ── */
+  .split-img-ph { background:linear-gradient(135deg,#5DADE2 0%,#0D1B2A 100%); min-height:500px; display:flex; align-items:center; justify-content:center; font-size:6rem; }
+  .feature-item { display:flex; align-items:center; gap:.8rem; font-size:.83rem; color:#4A6FA5; padding:.5rem 0; border-bottom:1px solid rgba(169,204,227,.2); }
+  .feature-item::before { content:''; width:6px; height:6px; border-radius:50%; background:linear-gradient(135deg,#C9A84C,#E8C96A); flex-shrink:0; }
+
+  /* ── CARRUSEL ── */
+  .carrusel-slide { flex:0 0 calc(33.333% - 11px); height:380px; border-radius:12px; overflow:hidden; position:relative; cursor:none; background:#0D1B2A; box-shadow:0 4px 20px rgba(13,27,42,.2); transition:box-shadow .4s, transform .4s; }
+  .carrusel-slide:hover { box-shadow:0 20px 50px rgba(13,27,42,.4); transform:translateY(-4px); }
+  .carrusel-slide img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .6s ease; }
+  .carrusel-slide:hover img { transform:scale(1.07); }
+  .slide-overlay { position:absolute; inset:0; background:linear-gradient(to top,rgba(13,27,42,.7) 0%,transparent 55%); opacity:0; transition:opacity .4s; }
+  .carrusel-slide:hover .slide-overlay { opacity:1; }
+  .slide-zoom { position:absolute; top:.9rem; right:.9rem; z-index:2; width:32px; height:32px; border-radius:50%; background:rgba(255,255,255,.1); backdrop-filter:blur(4px); border:1px solid rgba(255,255,255,.2); color:white; display:flex; align-items:center; justify-content:center; font-size:.8rem; opacity:0; transform:scale(.7); transition:opacity .4s,transform .4s; }
+  .carrusel-slide:hover .slide-zoom { opacity:1; transform:scale(1); }
+  .carr-btn { width:46px; height:46px; border-radius:50%; background:rgba(13,27,42,.6); backdrop-filter:blur(8px); border:1px solid rgba(201,168,76,.3); color:#E8C96A; font-size:1.1rem; display:flex; align-items:center; justify-content:center; cursor:none; transition:background .3s,transform .2s,box-shadow .3s; }
+  .carr-btn:hover { background:rgba(201,168,76,.15); transform:scale(1.1); box-shadow:0 4px 16px rgba(201,168,76,.2); }
+  .carr-dot { width:6px; height:6px; border-radius:50%; background:rgba(201,168,76,.25); cursor:none; transition:background .3s,transform .3s; }
+  .carr-dot.active { background:#C9A84C; transform:scale(1.6); }
+
+  /* ── TESTIMONIALS ── */
+  .test-card { background:white; border-radius:12px; padding:2rem; border:1px solid rgba(169,204,227,.2); box-shadow:0 2px 16px rgba(13,27,42,.05); transition:transform .3s,box-shadow .3s,border-color .3s; }
+  .test-card:hover { transform:translateY(-5px); box-shadow:0 16px 40px rgba(13,27,42,.1); border-color:rgba(201,168,76,.3); }
+  .test-quote { font-family:'Playfair Display',serif; font-size:4rem; line-height:.4; color:#E8C96A; margin-bottom:1rem; }
+  .test-text { font-family:'Cormorant Garamond',serif; font-size:1.1rem; font-weight:300; font-style:italic; line-height:1.85; color:#4A6FA5; margin-bottom:1.5rem; }
+  .av { width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:.75rem; font-weight:600; flex-shrink:0; }
+  .av1 { background:linear-gradient(135deg,#D6EAF8,#A9CCE3); color:#1A2F45; }
+  .av2 { background:linear-gradient(135deg,#EBF5FB,#D6EAF8); color:#5DADE2; border:1px solid #A9CCE3; }
+  .av3 { background:linear-gradient(135deg,#1A2F45,#0D1B2A); color:white; }
+
+  /* ── LIGHTBOX ── */
+  #lightbox { position:fixed; inset:0; z-index:5000; background:rgba(13,27,42,.97); display:flex; align-items:center; justify-content:center; opacity:0; visibility:hidden; transition:opacity .4s,visibility .4s; cursor:none; }
+  #lightbox.open { opacity:1; visibility:visible; }
+  .lb-inner { position:relative; max-width:700px; width:92%; transform:scale(.88); transition:transform .45s cubic-bezier(.34,1.56,.64,1); }
+  #lightbox.open .lb-inner { transform:scale(1); }
+  .lb-box { width:100%; aspect-ratio:4/3; border-radius:8px; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  .lb-close { position:absolute; top:-1.8rem; right:-1rem; width:38px; height:38px; border-radius:50%; background:rgba(201,168,76,.1); border:1px solid rgba(201,168,76,.25); color:#E8C96A; font-size:1rem; display:flex; align-items:center; justify-content:center; cursor:none; transition:background .3s; }
+  .lb-close:hover { background:rgba(201,168,76,.25); }
+  .lb-arrows { display:flex; justify-content:space-between; margin-top:1.2rem; gap:1rem; }
+  .lb-arrow { background:rgba(13,27,42,.9); border:1px solid rgba(201,168,76,.3); color:#E8C96A; padding:.55rem 1.6rem; font-size:.78rem; cursor:none; transition:background .3s,border-color .3s; border-radius:4px; font-family:'Montserrat',sans-serif; letter-spacing:.1em; }
+  .lb-arrow:hover { background:rgba(201,168,76,.15); border-color:#C9A84C; }
+  .lb-dots { display:flex; gap:.6rem; align-items:center; justify-content:center; margin-top:1rem; }
+  .lb-dot { width:5px; height:5px; border-radius:50%; background:rgba(201,168,76,.2); cursor:none; transition:background .3s,transform .3s; }
+  .lb-dot.active { background:#C9A84C; transform:scale(1.7); }
+
+  /* ── WA FLOAT ── */
+  #wa-float { position:fixed; bottom:2rem; right:2rem; z-index:500; display:flex; align-items:center; gap:.8rem; background:#25D366; color:white; padding:.75rem 1.3rem .75rem 1rem; border-radius:50px; box-shadow:0 4px 24px rgba(37,211,102,.4); text-decoration:none; font-size:.75rem; letter-spacing:.1em; text-transform:uppercase; font-family:'Montserrat',sans-serif; font-weight:500; cursor:none; transform:translateY(80px); opacity:0; transition:transform .55s cubic-bezier(.34,1.56,.64,1),opacity .55s,box-shadow .3s; }
+  #wa-float.show { transform:translateY(0); opacity:1; }
+  #wa-float:hover { background:#1ebe5c; box-shadow:0 8px 36px rgba(37,211,102,.55); }
+  #wa-float svg { width:22px; height:22px; flex-shrink:0; }
+  .wa-pulse { position:absolute; top:-4px; right:-4px; width:13px; height:13px; border-radius:50%; background:#25D366; animation:wap 2s ease-out infinite; }
+  @keyframes wap { 0%{transform:scale(1);opacity:1} 70%{transform:scale(2.4);opacity:0} 100%{transform:scale(1);opacity:0} }
+
+  /* ── REVEAL ── */
+  .reveal { opacity:0; transform:translateY(40px); transition:opacity .8s ease, transform .8s ease; }
+  .reveal.visible { opacity:1; transform:translateY(0); }
+  .rd1{transition-delay:.1s}.rd2{transition-delay:.2s}.rd3{transition-delay:.3s}
+  .rd4{transition-delay:.4s}.rd5{transition-delay:.5s}.rd6{transition-delay:.6s}
+
+  /* Hero entry */
+  @keyframes hero-in { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+  .hero-e1{animation:hero-in .9s .3s ease forwards;opacity:0;}
+  .hero-e2{animation:hero-in .9s .55s ease forwards;opacity:0;}
+  .hero-e3{animation:hero-in .9s .75s ease forwards;opacity:0;}
+  .hero-e4{animation:hero-in .9s .95s ease forwards;opacity:0;}
+
+  /* Glassmorphism card */
+  .glass { background:rgba(255,255,255,.07); backdrop-filter:blur(12px); border:1px solid rgba(255,255,255,.1); border-radius:12px; }
+  .glass-gold { background:rgba(201,168,76,.08); backdrop-filter:blur(12px); border:1px solid rgba(201,168,76,.2); border-radius:12px; }
+
+  /* Contact info rows */
+  .info-row { display:flex; gap:1rem; align-items:flex-start; padding:1rem 0; border-bottom:1px solid rgba(184,212,232,.12); }
+  .info-icon { font-size:1.2rem; flex-shrink:0; margin-top:.1rem; }
+  .info-label { font-size:.63rem; letter-spacing:.22em; text-transform:uppercase; color:#C9A84C; margin-bottom:.25rem; }
+  .info-val { font-size:.85rem; color:rgba(184,212,232,.65); line-height:1.6; }
+
+  /* Btn gold */
+  .btn-gold { display:inline-flex; align-items:center; gap:.6rem; padding:.9rem 2.2rem; background:linear-gradient(135deg,#C9A84C,#E8C96A); color:#0D1B2A; font-family:'Montserrat',sans-serif; font-size:.75rem; font-weight:600; letter-spacing:.18em; text-transform:uppercase; text-decoration:none; border-radius:4px; box-shadow:0 4px 20px rgba(201,168,76,.35); transition:box-shadow .3s,transform .2s; cursor:none; border:none; }
+  .btn-gold:hover { box-shadow:0 8px 32px rgba(201,168,76,.55); transform:translateY(-2px); }
+  .btn-outline-gold { display:inline-flex; align-items:center; gap:.5rem; padding:.85rem 2rem; border:1px solid rgba(201,168,76,.4); color:#E8C96A; font-family:'Montserrat',sans-serif; font-size:.75rem; font-weight:400; letter-spacing:.18em; text-transform:uppercase; text-decoration:none; border-radius:4px; transition:border-color .3s,background .3s; cursor:none; }
+  .btn-outline-gold:hover { border-color:#C9A84C; background:rgba(201,168,76,.08); }
+  .btn-wa { display:inline-flex; align-items:center; gap:.6rem; padding:.9rem 2rem; background:#25D366; color:white; font-family:'Montserrat',sans-serif; font-size:.75rem; font-weight:500; letter-spacing:.15em; text-transform:uppercase; text-decoration:none; border-radius:4px; box-shadow:0 4px 16px rgba(37,211,102,.3); transition:box-shadow .3s,transform .2s; cursor:none; }
+  .btn-wa:hover { background:#1ebe5c; box-shadow:0 8px 28px rgba(37,211,102,.45); transform:translateY(-2px); }
+  .btn-ig { display:inline-flex; align-items:center; gap:.5rem; padding:.85rem 2rem; border:1px solid rgba(184,212,232,.25); color:rgba(184,212,232,.8); font-family:'Montserrat',sans-serif; font-size:.75rem; font-weight:400; letter-spacing:.15em; text-transform:uppercase; text-decoration:none; border-radius:4px; transition:border-color .3s,color .3s; cursor:none; }
+  .btn-ig:hover { border-color:rgba(184,212,232,.5); color:white; }
+
+  /* Decorative divider */
+  .gold-divider { width:60px; height:2px; background:linear-gradient(90deg,transparent,#C9A84C,transparent); margin:0 auto 1.5rem; }
+  .gold-divider-left { width:60px; height:2px; background:linear-gradient(90deg,#C9A84C,transparent); margin-bottom:1.5rem; }
+
+  @media(max-width:900px){
+    body{cursor:auto;}
+    #cursor,#cursor-ring{display:none;}
+    #main-nav{padding:1.1rem 1.5rem;}
+    .nav-links-wrap{display:none;}
+    .carrusel-slide{flex:0 0 100%;height:260px;}
+    #wa-float span{display:none;}
+    #wa-float{padding:.9rem;border-radius:50%;}
+  }
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div><img src="img/logo.png" alt="Ahavah Nails" class="loader-logo-img"></div>
+  <div class="loader-bar"></div>
+  <p class="loader-name gold-text">AHAVAH</p>
+  <p class="loader-sub">Nails Studio · Xalapa · Veracruz</p>
+</div>
+
+<!-- CURSOR -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- WHATSAPP -->
+<a id="wa-float" href="https://wa.me/522281185232" target="_blank">
+  <div class="wa-pulse"></div>
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.554 4.118 1.528 5.845L.057 23.428a.5.5 0 0 0 .609.61l5.703-1.496A11.953 11.953 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.907 0-3.694-.5-5.24-1.375l-.376-.22-3.885 1.02 1.02-3.79-.239-.39A9.958 9.958 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+  <span>Reservar ahora</span>
+</a>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" role="dialog" aria-modal="true">
+  <div class="lb-inner">
+    <button class="lb-close" id="lb-close">✕</button>
+    <div class="lb-box" id="lb-box"></div>
+    <div class="lb-arrows">
+      <button class="lb-arrow" id="lb-prev">← Anterior</button>
+      <button class="lb-arrow" id="lb-next">Siguiente →</button>
+    </div>
+    <div class="lb-dots" id="lb-dots"></div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav id="main-nav" class="nav-dark flex items-center justify-between">
+  <a href="#" class="flex items-center gap-3 no-underline">
+    <img src="img/logo.png" alt="Ahavah" class="nav-logo-img">
+    <span class="nav-logo-text font-display tracking-widest gold-text-slow">AHAVAH</span>
+    <span class="nav-logo-text text-sm tracking-wider" style="opacity:.7">Nails</span>
+  </a>
+  <div class="nav-links-wrap flex items-center gap-8">
+    <a href="#servicios"   class="nav-link">Servicios</a>
+    <a href="#galeria"     class="nav-link">Galería</a>
+    <a href="#testimonios" class="nav-link">Reseñas</a>
+    <a href="#contacto"    class="nav-cta nav-link">Reservar</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <!-- Orbs -->
+  <div class="hero-orb orb1"></div>
+  <div class="hero-orb orb2"></div>
+  <div class="hero-orb orb3"></div>
+  <!-- Líneas -->
+  <div class="hero-lines">
+    <div class="hero-line hl1"></div><div class="hero-line hl2"></div>
+    <div class="hero-line hl3"></div><div class="hero-line hl4"></div>
+  </div>
+  <!-- Partículas doradas generadas por JS -->
+  <div id="hero-particles"></div>
+
+  <div class="relative z-10 max-w-7xl mx-auto px-12 py-24 w-full">
+    <div class="max-w-2xl">
+      <div class="flex items-center gap-3 mb-6 hero-e1">
+        <div style="width:40px;height:1px;background:linear-gradient(90deg,#C9A84C,#E8C96A)"></div>
+        <span style="font-size:.68rem;letter-spacing:.35em;text-transform:uppercase;color:#B8D4E8;">Studio de uñas · Xalapa, Veracruz</span>
+      </div>
+      <h1 class="hero-e2" style="font-family:'Playfair Display',serif;font-size:clamp(2.8rem,5.5vw,5.2rem);font-weight:400;line-height:1.08;color:white;margin-bottom:1.6rem;">
+        El arte que llevas<br>en <em class="gold-text" style="font-style:italic;">cada detalle</em>
+      </h1>
+      <p class="hero-e3" style="font-size:.9rem;line-height:1.9;color:rgba(184,212,232,.7);max-width:440px;margin-bottom:2.5rem;">
+        Diseños exclusivos, técnicas premium y una experiencia pensada para ti. Servicio a domicilio en Xalapa y área metropolitana.
+      </p>
+      <div class="flex gap-4 items-center hero-e4">
+        <a href="#contacto" class="btn-gold">Reservar cita</a>
+        <a href="#galeria"  class="btn-outline-gold">Ver galería →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Badge -->
+  <div class="glass-gold absolute bottom-10 right-10 px-7 py-5 text-center hidden md:block">
+    <span style="font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:400;display:block;" class="gold-text">500+</span>
+    <span style="font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;color:rgba(184,212,232,.6);">Clientas felices</span>
+  </div>
+</section>
+
+<!-- RIBBON -->
+<div class="ribbon-wrap overflow-hidden">
+  <div class="ribbon-track">
+    <span class="ribbon-item">Manicure en gel</span><span class="ribbon-item">Nail art personalizado</span>
+    <span class="ribbon-item">Polygel & acrílico</span><span class="ribbon-item">Diseños de temporada</span>
+    <span class="ribbon-item">Pedicure spa</span><span class="ribbon-item">Servicio a domicilio</span>
+    <span class="ribbon-item">Manicure en gel</span><span class="ribbon-item">Nail art personalizado</span>
+    <span class="ribbon-item">Polygel & acrílico</span><span class="ribbon-item">Diseños de temporada</span>
+    <span class="ribbon-item">Pedicure spa</span><span class="ribbon-item">Servicio a domicilio</span>
+  </div>
+</div>
+
+<!-- WHY US -->
+<section id="por-que" class="py-28 px-12 bg-white">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-16 reveal">
+      <div class="gold-divider"></div>
+      <p class="sec-label justify-center">¿Por qué elegirnos?</p>
+      <h2 style="font-family:'Playfair Display',serif;font-size:clamp(2rem,3.5vw,2.8rem);font-weight:400;color:#0D1B2A;">
+        Calidad que se ve<br>y se <em class="gold-text-slow" style="font-style:italic;">siente</em>
+      </h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="why-card reveal rd1">
+        <div class="why-img-ph ph1">💅</div>
+        <div class="p-6">
+          <h3 style="font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:400;margin-bottom:.5rem;color:#0D1B2A;">Acabados de larga duración</h3>
+          <p style="font-size:.82rem;line-height:1.8;color:#4A6FA5;">Usamos productos premium que garantizan resultados hermosos y duraderos por semanas.</p>
+        </div>
+      </div>
+      <div class="why-card reveal rd2">
+        <div class="why-img-ph ph2">✨</div>
+        <div class="p-6">
+          <h3 style="font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:400;margin-bottom:.5rem;color:#0D1B2A;">Diseño personalizado</h3>
+          <p style="font-size:.82rem;line-height:1.8;color:#4A6FA5;">Cada set es único. Escuchamos tus ideas y las hacemos realidad con creatividad y precisión.</p>
+        </div>
+      </div>
+      <div class="why-card reveal rd3">
+        <div class="why-img-ph ph3">🏠</div>
+        <div class="p-6">
+          <h3 style="font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:400;margin-bottom:.5rem;color:#0D1B2A;">Servicio a domicilio</h3>
+          <p style="font-size:.82rem;line-height:1.8;color:#4A6FA5;">Nos trasladamos a tu hogar en Xalapa y área metropolitana para que disfrutes sin salir de casa.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="servicios" style="background:#F4F8FC;" class="py-28 px-12">
+  <div class="max-w-7xl mx-auto">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16 items-end reveal">
+      <div>
+        <div class="gold-divider-left"></div>
+        <p class="sec-label">Nuestros servicios</p>
+        <h2 style="font-family:'Playfair Display',serif;font-size:clamp(2rem,3vw,2.8rem);font-weight:400;color:#0D1B2A;">
+          Lo que hacemos<br>con <em class="gold-text-slow" style="font-style:italic;">pasión</em>
+        </h2>
+      </div>
+      <p style="font-size:.85rem;line-height:1.9;color:#4A6FA5;align-self:end;">Pasa el cursor sobre cada tarjeta para ver los detalles y precio de cada servicio.</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div class="flip-card reveal rd1"><div class="flip-card-inner">
+        <div class="flip-front"><div><p class="svc-num">01</p><p class="flip-hint">hover para ver más</p></div><span style="font-size:1.8rem;">💅</span><div><p class="svc-name-front">Manicure en gel</p><p class="svc-price-front">$250 <span style="font-size:.75rem;color:#A9CCE3;">/ sesión</span></p></div></div>
+        <div class="flip-back"><p class="svc-name-back">Manicure en gel</p><p class="svc-detail">Acabado brillante de larga duración. Incluye forma, cutícula y color en gel semipermanente. Dura hasta 3 semanas.</p><p class="svc-price-back gold-text">$250 <span style="font-size:.72rem;">/ sesión</span></p><a href="#contacto" class="svc-cta">Reservar →</a></div>
+      </div></div>
+      <div class="flip-card reveal rd2"><div class="flip-card-inner">
+        <div class="flip-front"><div><p class="svc-num">02</p><p class="flip-hint">hover para ver más</p></div><span style="font-size:1.8rem;">✨</span><div><p class="svc-name-front">Nail art & diseño</p><p class="svc-price-front">$350 <span style="font-size:.75rem;color:#A9CCE3;">/ sesión</span></p></div></div>
+        <div class="flip-back"><p class="svc-name-back">Nail art & diseño</p><p class="svc-detail">Desde florales delicados hasta diseños geométricos. Cada diseño es único. Trae inspiración o déjate sorprender.</p><p class="svc-price-back gold-text">$350 <span style="font-size:.72rem;">/ sesión</span></p><a href="#contacto" class="svc-cta">Reservar →</a></div>
+      </div></div>
+      <div class="flip-card reveal rd3"><div class="flip-card-inner">
+        <div class="flip-front"><div><p class="svc-num">03</p><p class="flip-hint">hover para ver más</p></div><span style="font-size:1.8rem;">🌸</span><div><p class="svc-name-front">Acrílico & polygel</p><p class="svc-price-front">$450 <span style="font-size:.75rem;color:#A9CCE3;">/ sesión</span></p></div></div>
+        <div class="flip-back"><p class="svc-name-back">Acrílico & polygel</p><p class="svc-detail">Extensiones naturales o stiletto con la forma que elijas. Relleno incluido en tu segunda cita dentro del mes.</p><p class="svc-price-back gold-text">$450 <span style="font-size:.72rem;">/ sesión</span></p><a href="#contacto" class="svc-cta">Reservar →</a></div>
+      </div></div>
+      <div class="flip-card reveal rd4"><div class="flip-card-inner">
+        <div class="flip-front"><div><p class="svc-num">04</p><p class="flip-hint">hover para ver más</p></div><span style="font-size:1.8rem;">🦋</span><div><p class="svc-name-front">Pedicure spa</p><p class="svc-price-front">$300 <span style="font-size:.75rem;color:#A9CCE3;">/ sesión</span></p></div></div>
+        <div class="flip-back"><p class="svc-name-back">Pedicure spa</p><p class="svc-detail">Exfoliación, masaje relajante de 15 min, hidratación profunda con aceites esenciales y esmaltado de larga duración.</p><p class="svc-price-back gold-text">$300 <span style="font-size:.72rem;">/ sesión</span></p><a href="#contacto" class="svc-cta">Reservar →</a></div>
+      </div></div>
+      <div class="flip-card reveal rd5"><div class="flip-card-inner">
+        <div class="flip-front"><div><p class="svc-num">05</p><p class="flip-hint">hover para ver más</p></div><span style="font-size:1.8rem;">🎀</span><div><p class="svc-name-front">Pack novias</p><p class="svc-price-front">$900 <span style="font-size:.75rem;color:#A9CCE3;">/ pack</span></p></div></div>
+        <div class="flip-back"><p class="svc-name-back">Pack novias</p><p class="svc-detail">Manos y pies con diseño personalizado para tu día especial. Incluye cita de prueba previa y retoque el día del evento.</p><p class="svc-price-back gold-text">$900 <span style="font-size:.72rem;">/ pack</span></p><a href="#contacto" class="svc-cta">Reservar →</a></div>
+      </div></div>
+      <div class="flip-card reveal rd6"><div class="flip-card-inner">
+        <div class="flip-front"><div><p class="svc-num">06</p><p class="flip-hint">hover para ver más</p></div><span style="font-size:1.8rem;">🌙</span><div><p class="svc-name-front">Retiro & mantenimiento</p><p class="svc-price-front">$150 <span style="font-size:.75rem;color:#A9CCE3;">/ sesión</span></p></div></div>
+        <div class="flip-back"><p class="svc-name-back">Retiro & mantenimiento</p><p class="svc-detail">Remoción segura sin dañar tu uña natural, con tratamiento hidratante y nutritivo posterior incluido.</p><p class="svc-price-back gold-text">$150 <span style="font-size:.72rem;">/ sesión</span></p><a href="#contacto" class="svc-cta">Reservar →</a></div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SPLIT -->
+<section class="grid grid-cols-1 md:grid-cols-2">
+  <div class="split-img-ph">💅</div>
+  <div class="bg-white flex flex-col justify-center px-14 py-20 reveal">
+    <div class="gold-divider-left"></div>
+    <p class="sec-label">Comodidad total</p>
+    <h2 style="font-family:'Playfair Display',serif;font-size:clamp(2rem,3vw,3rem);font-weight:400;line-height:1.15;color:#0D1B2A;margin-bottom:1.2rem;">
+      Tu servicio<br>a <em class="gold-text-slow" style="font-style:italic;">domicilio</em><br>te espera
+    </h2>
+    <p style="font-size:.85rem;line-height:1.9;color:#4A6FA5;max-width:380px;margin-bottom:1.8rem;">No necesitas salir de casa. Llevamos el studio hasta ti con todos los materiales y la misma calidad de siempre.</p>
+    <div style="margin-bottom:2rem;">
+      <div class="feature-item">Atención en Xalapa y área metropolitana</div>
+      <div class="feature-item">Lunes a sábado 9:00 – 20:00 · Domingos 10:00 – 16:00</div>
+      <div class="feature-item">Todos los servicios disponibles a domicilio</div>
+      <div class="feature-item">Agenda con mínimo 24 hrs de anticipación</div>
+    </div>
+    <a href="https://wa.me/522281185232" class="btn-gold" style="align-self:flex-start">Agendar ahora</a>
+  </div>
+</section>
+
+<!-- CAROUSEL -->
+<section style="background:linear-gradient(135deg,#0D1B2A 0%,#162638 50%,#0D1B2A 100%);" class="py-28 px-12" id="galeria">
+  <div class="max-w-7xl mx-auto">
+    <div class="reveal mb-14">
+      <div class="gold-divider-left"></div>
+      <p class="sec-label">Nuestros trabajos</p>
+      <h2 style="font-family:'Playfair Display',serif;font-size:clamp(2rem,3.5vw,2.8rem);font-weight:400;color:white;">
+        Cada set, una <em class="gold-text" style="font-style:italic;">obra de arte</em>
+      </h2>
+    </div>
+    <div class="reveal">
+      <div style="overflow:hidden;border-radius:12px;" id="carr-viewport">
+        <div style="display:flex;gap:16px;transition:transform .55s cubic-bezier(.4,0,.2,1);" id="carrusel-track">
+          <div class="carrusel-slide" data-tj="0"><img src="img/img1.jpeg" alt="Trabajo 1" loading="lazy"><div class="slide-overlay"></div><div class="slide-zoom">⤢</div></div>
+          <div class="carrusel-slide" data-tj="1"><img src="img/img2.jpeg" alt="Trabajo 2" loading="lazy"><div class="slide-overlay"></div><div class="slide-zoom">⤢</div></div>
+          <div class="carrusel-slide" data-tj="2"><img src="img/img3.jpeg" alt="Trabajo 3" loading="lazy"><div class="slide-overlay"></div><div class="slide-zoom">⤢</div></div>
+          <div class="carrusel-slide" data-tj="3"><img src="img/img4.jpeg" alt="Trabajo 4" loading="lazy"><div class="slide-overlay"></div><div class="slide-zoom">⤢</div></div>
+          <div class="carrusel-slide" data-tj="4"><img src="img/img5.jpeg" alt="Trabajo 5" loading="lazy"><div class="slide-overlay"></div><div class="slide-zoom">⤢</div></div>
+          <div class="carrusel-slide" data-tj="5"><img src="img/img6.jpeg" alt="Trabajo 6" loading="lazy"><div class="slide-overlay"></div><div class="slide-zoom">⤢</div></div>
+          <div class="carrusel-slide" data-tj="6"><img src="img/img7.jpeg" alt="Trabajo 7" loading="lazy"><div class="slide-overlay"></div><div class="slide-zoom">⤢</div></div>
+        </div>
+      </div>
+      <div class="flex items-center justify-center gap-6 mt-8">
+        <button class="carr-btn" id="carr-prev">&#8592;</button>
+        <div class="flex gap-2 items-center" id="carr-dots"></div>
+        <button class="carr-btn" id="carr-next">&#8594;</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonios" class="py-28 px-12 bg-white">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-16 reveal">
+      <div class="gold-divider"></div>
+      <p class="sec-label justify-center">Testimonios</p>
+      <h2 style="font-family:'Playfair Display',serif;font-size:clamp(2rem,3.5vw,2.8rem);font-weight:400;color:#0D1B2A;">
+        Lo que dicen<br>nuestras <em class="gold-text-slow" style="font-style:italic;">clientas</em>
+      </h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="test-card reveal rd1"><div style="color:#E8C96A;font-size:.75rem;letter-spacing:.15em;margin-bottom:.8rem;">★★★★★</div><div class="test-quote">"</div><p class="test-text">Nunca había encontrado un lugar donde me sintiera tan cómoda. El nail art quedó exactamente como lo imaginé, ¡incluso mejor!</p><div class="flex items-center gap-3"><div class="av av1">SA</div><div><p style="font-size:.82rem;font-weight:500;">Sofía Álvarez</p><p style="font-size:.72rem;color:#4A6FA5;">Clienta frecuente</p></div></div></div>
+      <div class="test-card reveal rd2"><div style="color:#E8C96A;font-size:.75rem;letter-spacing:.15em;margin-bottom:.8rem;">★★★★★</div><div class="test-quote">"</div><p class="test-text">El pack de novias fue perfecto. Mis uñas lucieron impecables todo el día y el masaje de pedicure fue un regalo para el alma.</p><div class="flex items-center gap-3"><div class="av av2">MR</div><div><p style="font-size:.82rem;font-weight:500;">Mariana Reyes</p><p style="font-size:.72rem;color:#4A6FA5;">Novia 2024</p></div></div></div>
+      <div class="test-card reveal rd3"><div style="color:#E8C96A;font-size:.75rem;letter-spacing:.15em;margin-bottom:.8rem;">★★★★★</div><div class="test-quote">"</div><p class="test-text">Llevo 8 meses viniendo cada mes. La calidad del gel es increíble, me dura mucho y el trato es siempre muy amable y profesional.</p><div class="flex items-center gap-3"><div class="av av3">VL</div><div><p style="font-size:.82rem;font-weight:500;">Valentina López</p><p style="font-size:.72rem;color:#4A6FA5;">VIP desde 2023</p></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contacto" style="background:linear-gradient(135deg,#0D1B2A 0%,#152030 50%,#0D1B2A 100%);" class="py-28 px-12">
+  <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+    <div class="reveal">
+      <div class="gold-divider-left"></div>
+      <p class="sec-label">¿Lista para brillar?</p>
+      <h2 style="font-family:'Playfair Display',serif;font-size:clamp(2.5rem,4vw,3.8rem);font-weight:400;color:white;line-height:1.12;margin-bottom:1rem;">
+        Agenda tu cita<br><em class="gold-text" style="font-style:italic;">hoy mismo</em>
+      </h2>
+      <p style="font-size:.85rem;line-height:1.9;color:rgba(184,212,232,.6);margin-bottom:2rem;max-width:380px;">Escríbenos por WhatsApp o síguenos en Instagram para ver los últimos diseños y tendencias.</p>
+      <div class="flex gap-3 flex-wrap">
+        <a href="https://wa.me/522281185232" class="btn-wa" target="_blank">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.554 4.118 1.528 5.845L.057 23.428a.5.5 0 0 0 .609.61l5.703-1.496A11.953 11.953 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.907 0-3.694-.5-5.24-1.375l-.376-.22-3.885 1.02 1.02-3.79-.239-.39A9.958 9.958 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+          WhatsApp
+        </a>
+        <a href="https://www.instagram.com/ahavah_nails.xalp?igsh=Z2h2aXRnMnR2NnJi" class="btn-ig" target="_blank">Instagram →</a>
+      </div>
+    </div>
+    <div class="glass rounded-2xl p-8 reveal rd2">
+      <div class="info-row"><span class="info-icon">🕐</span><div><p class="info-label">Horario</p><p class="info-val">Lunes – Sábado: 9:00 – 20:00<br>Domingos: 10:00 – 16:00</p></div></div>
+      <div class="info-row"><span class="info-icon">🏠</span><div><p class="info-label">Servicio</p><p class="info-val">Atención a domicilio<br>Xalapa y área metropolitana</p></div></div>
+      <div class="info-row"><span class="info-icon">📱</span><div><p class="info-label">WhatsApp</p><p class="info-val">+52 228 118 5232</p></div></div>
+      <div class="info-row" style="border-bottom:none"><span class="info-icon">📸</span><div><p class="info-label">Instagram</p><p class="info-val">@ahavah_nails.xalp</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="background:#080F16;border-top:1px solid rgba(201,168,76,.1);" class="px-12 py-8 flex flex-wrap justify-between items-center gap-4">
+  <div class="flex items-center gap-3">
+    <img src="img/logo.png" alt="" style="width:28px;height:28px;object-fit:contain;filter:brightness(0) invert(1);opacity:.6;">
+    <span style="font-family:'Playfair Display',serif;font-size:1.2rem;letter-spacing:.12em;" class="gold-text-slow">AHAVAH</span>
+    <span style="font-size:.85rem;color:rgba(255,255,255,.35);letter-spacing:.08em;">Nails Studio</span>
+  </div>
+  <p style="font-size:.7rem;color:rgba(255,255,255,.25);letter-spacing:.1em;">© 2025 Ahavah Nails · Xalapa, Veracruz</p>
+  <div class="flex gap-6">
+    <a href="#servicios"   style="font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.35);text-decoration:none;transition:color .3s;" onmouseover="this.style.color='#C9A84C'" onmouseout="this.style.color='rgba(255,255,255,.35)'">Servicios</a>
+    <a href="#galeria"     style="font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.35);text-decoration:none;transition:color .3s;" onmouseover="this.style.color='#C9A84C'" onmouseout="this.style.color='rgba(255,255,255,.35)'">Galería</a>
+    <a href="#contacto"    style="font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.35);text-decoration:none;transition:color .3s;" onmouseover="this.style.color='#C9A84C'" onmouseout="this.style.color='rgba(255,255,255,.35)'">Contacto</a>
+  </div>
+</footer>
+
+<script>
+/* ── LOADER ── */
+window.addEventListener('load',()=>setTimeout(()=>document.getElementById('loader').classList.add('hidden'),2100));
+
+/* ── PARTÍCULAS HERO ── */
+(function(){
+  const wrap=document.getElementById('hero-particles');
+  const colors=['#C9A84C','#E8C96A','#F5E070','rgba(184,212,232,.6)','rgba(255,255,255,.4)'];
+  for(let i=0;i<18;i++){
+    const p=document.createElement('div');
+    p.className='hero-particle';
+    const s=Math.random()*4+2;
+    const shape=Math.random()>.6?'50%':'2px';
+    p.style.cssText=`
+      left:${Math.random()*100}%;
+      width:${s}px;height:${s}px;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      border-radius:${shape};
+      animation-duration:${8+Math.random()*12}s;
+      animation-delay:${Math.random()*8}s;
+    `;
+    wrap.appendChild(p);
+  }
+})();
+
+/* ── CURSOR ── */
+const cur=document.getElementById('cursor'),ring=document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+(function anim(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(anim);})();
+document.querySelectorAll('a,button,.flip-card,.carrusel-slide').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.width='20px';cur.style.height='20px';ring.style.width='48px';ring.style.height='48px';ring.style.opacity='.3';});
+  el.addEventListener('mouseleave',()=>{cur.style.width='10px';cur.style.height='10px';ring.style.width='32px';ring.style.height='32px';ring.style.opacity='.7';});
+});
+
+/* ── GLITTER ── */
+const gc=['#C9A84C','#E8C96A','#F5E070','#B8D4E8','#ffffff'];
+let lastG=0;
+document.addEventListener('mousemove',e=>{
+  const now=Date.now();if(now-lastG<48)return;lastG=now;
+  const n=Math.random()<.4?2:1;
+  for(let i=0;i<n;i++){
+    const p=document.createElement('div');p.className='glitter';
+    const s=Math.random()*5+2;
+    const shapes=['50%','2px','30%'];
+    p.style.cssText=`left:${e.clientX+(Math.random()-.5)*24}px;top:${e.clientY+(Math.random()-.5)*24}px;width:${s}px;height:${s}px;background:${gc[Math.floor(Math.random()*gc.length)]};border-radius:${shapes[Math.floor(Math.random()*shapes.length)]};animation-duration:${.55+Math.random()*.6}s;`;
+    document.body.appendChild(p);setTimeout(()=>p.remove(),1000);
+  }
+});
+
+/* ── SMOOTH SCROLL ── */
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{const t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'});}});
+});
+
+/* ── NAV ADAPTATIVO ── */
+const nav=document.getElementById('main-nav');
+const navSections=[
+  {selector:'#hero',        theme:'dark'},
+  {selector:'#por-que',     theme:'light'},
+  {selector:'#servicios',   theme:'light'},
+  {selector:'.grid.grid-cols-1.md\\:grid-cols-2',theme:'light'},
+  {selector:'#galeria',     theme:'dark'},
+  {selector:'#testimonios', theme:'light'},
+  {selector:'#contacto',    theme:'dark'},
+];
+let currentTheme='dark';
+function applyNav(theme,scrolled){
+  nav.classList.toggle('scrolled',scrolled);
+  nav.classList.toggle('nav-dark',theme==='dark');
+  nav.classList.toggle('nav-light',theme==='light');
+}
+navSections.forEach(({selector,theme})=>{
+  const el=document.querySelector(selector);if(!el)return;
+  new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting){currentTheme=theme;applyNav(currentTheme,scrollY>55);}});
+  },{threshold:.3}).observe(el);
+});
+window.addEventListener('scroll',()=>applyNav(currentTheme,scrollY>55),{passive:true});
+
+/* ── WHATSAPP ── */
+window.addEventListener('scroll',()=>document.getElementById('wa-float').classList.toggle('show',scrollY>280),{passive:true});
+
+/* ── REVEAL ── */
+new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');}}); },{threshold:.1})
+  .observe==(()=>{})();
+const ro=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');ro.unobserve(e.target);}});},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+
+/* ── CARRUSEL INFINITO ── */
+(function(){
+  const track=document.getElementById('carrusel-track');
+  const dotsWrap=document.getElementById('carr-dots');
+  const slides=Array.from(track.children);
+  const TOTAL=slides.length;
+  let curr=0,autoTimer=null,isT=false;
+  slides.map(s=>s.cloneNode(true)).forEach(c=>track.appendChild(c));
+  slides.map(s=>s.cloneNode(true)).forEach(c=>track.insertBefore(c,track.firstChild));
+  function getW(){return track.children[0].offsetWidth+16;}
+  function init(){track.style.transition='none';track.style.transform=`translateX(-${(TOTAL+curr)*getW()}px)`;}
+  init();window.addEventListener('resize',init);
+  for(let i=0;i<TOTAL;i++){const d=document.createElement('div');d.className='carr-dot'+(i===0?' active':'');d.addEventListener('click',()=>goTo(i));dotsWrap.appendChild(d);}
+  function upDots(){document.querySelectorAll('.carr-dot').forEach((d,i)=>d.classList.toggle('active',i===curr));}
+  function goTo(i,anim=true){
+    if(isT)return;isT=true;
+    curr=((i%TOTAL)+TOTAL)%TOTAL;
+    track.style.transition=anim?'transform .55s cubic-bezier(.4,0,.2,1)':'none';
+    track.style.transform=`translateX(-${(TOTAL+curr)*getW()}px)`;upDots();
+  }
+  track.addEventListener('transitionend',()=>isT=false);
+  function next(){goTo(curr+1);}function prev(){goTo(curr-1);}
+  document.getElementById('carr-prev').addEventListener('click',()=>{resetAuto();prev();});
+  document.getElementById('carr-next').addEventListener('click',()=>{resetAuto();next();});
+  let tsX=0;
+  track.addEventListener('touchstart',e=>tsX=e.touches[0].clientX,{passive:true});
+  track.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tsX;if(Math.abs(dx)>45){resetAuto();dx<0?next():prev();}},{passive:true});
+  function startAuto(){autoTimer=setInterval(next,3200);}
+  function resetAuto(){clearInterval(autoTimer);startAuto();}
+  document.getElementById('carr-viewport').addEventListener('mouseenter',()=>clearInterval(autoTimer));
+  document.getElementById('carr-viewport').addEventListener('mouseleave',startAuto);
+  startAuto();
+  track.addEventListener('click',e=>{const s=e.target.closest('[data-tj]');if(s)openLB(parseInt(s.dataset.tj));});
+})();
+
+/* ── LIGHTBOX ── */
+const gallery=Array.from({length:7},(_,i)=>({src:`img/img${i+1}.jpeg`,name:`Trabajo ${i+1}`}));
+const lb=document.getElementById('lightbox'),lbBox=document.getElementById('lb-box'),lbDots=document.getElementById('lb-dots');
+let ci=0;
+function renderLB(i){
+  ci=i;const d=gallery[i];
+  lbBox.style.background='transparent';
+  lbBox.innerHTML=`<img src="${d.src}" alt="${d.name}" style="max-width:100%;max-height:70vh;object-fit:contain;border-radius:8px;box-shadow:0 8px 50px rgba(0,0,0,.7);">`;
+  lbDots.innerHTML='';
+  gallery.forEach((_,j)=>{const dot=document.createElement('div');dot.className='lb-dot'+(j===i?' active':'');dot.addEventListener('click',()=>renderLB(j));lbDots.appendChild(dot);});
+}
+function openLB(i){renderLB(i);lb.classList.add('open');document.body.style.overflow='hidden';}
+function closeLB(){lb.classList.remove('open');document.body.style.overflow='';}
+document.getElementById('lb-close').addEventListener('click',closeLB);
+document.getElementById('lb-prev').addEventListener('click',()=>renderLB((ci-1+gallery.length)%gallery.length));
+document.getElementById('lb-next').addEventListener('click',()=>renderLB((ci+1)%gallery.length));
+lb.addEventListener('click',e=>{if(e.target===lb)closeLB();});
+document.addEventListener('keydown',e=>{
+  if(!lb.classList.contains('open'))return;
+  if(e.key==='Escape')closeLB();
+  if(e.key==='ArrowRight')renderLB((ci+1)%gallery.length);
+  if(e.key==='ArrowLeft')renderLB((ci-1+gallery.length)%gallery.length);
+});
+</script>
+</body>
+</html>
