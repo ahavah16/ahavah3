@@ -279,9 +279,188 @@ tailwind.config = {
     #wa-float span{display:none;}
     #wa-float{padding:.9rem;border-radius:50%;}
   }
+
+/* ── SCROLL PROGRESS BAR ── */
+#progress-bar {
+  position: fixed; top: 0; left: 0; z-index: 10001;
+  height: 3px; width: 0%;
+  background: linear-gradient(90deg, #A07830, #C9A84C, #F5E070, #E8C96A, #C9A84C);
+  background-size: 200% auto;
+  animation: shimmer 3s linear infinite;
+  transition: width .1s linear;
+  box-shadow: 0 0 10px rgba(201,168,76,.6), 0 0 20px rgba(201,168,76,.3);
+}
+
+/* ── TYPEWRITER ── */
+.typewriter-wrap { display: inline; }
+.typewriter-text { border-right: 2px solid #E8C96A; animation: blink .75s step-end infinite; padding-right: 3px; }
+@keyframes blink { 0%,100%{border-color:#E8C96A} 50%{border-color:transparent} }
+
+/* ── CONTADOR ── */
+.stat-card {
+  background: rgba(255,255,255,.06);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(201,168,76,.2);
+  border-radius: 12px;
+  padding: 1.5rem 2rem;
+  text-align: center;
+  transition: border-color .3s, transform .3s;
+}
+.stat-card:hover { border-color: rgba(201,168,76,.45); transform: translateY(-4px); }
+.stat-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.8rem; font-weight: 400;
+  display: block; line-height: 1;
+  margin-bottom: .3rem;
+}
+.stat-label { font-size: .68rem; letter-spacing: .25em; text-transform: uppercase; color: rgba(184,212,232,.55); }
+
+/* ── ANTES / DESPUÉS ── */
+.slider-section { background: linear-gradient(135deg,#0D1B2A,#162638); padding: 7rem 3rem; }
+.ba-container {
+  position: relative; overflow: hidden; border-radius: 14px;
+  user-select: none; max-width: 700px; margin: 0 auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,.5);
+  cursor: col-resize;
+}
+.ba-container img { display: block; width: 100%; height: 420px; object-fit: cover; pointer-events: none; }
+.ba-after {
+  position: absolute; inset: 0; overflow: hidden;
+  width: 50%;
+}
+.ba-after img { width: 100vw; max-width: 700px; height: 420px; object-fit: cover; }
+.ba-handle {
+  position: absolute; top: 0; bottom: 0;
+  width: 3px; background: linear-gradient(to bottom, #C9A84C, #F5E070, #C9A84C);
+  left: 50%; transform: translateX(-50%);
+  box-shadow: 0 0 12px rgba(201,168,76,.6);
+}
+.ba-circle {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 44px; height: 44px; border-radius: 50%;
+  background: linear-gradient(135deg, #C9A84C, #E8C96A);
+  box-shadow: 0 4px 20px rgba(201,168,76,.5);
+  display: flex; align-items: center; justify-content: center;
+  color: #0D1B2A; font-size: .85rem; font-weight: 700;
+  white-space: nowrap; gap: 2px;
+}
+.ba-label {
+  position: absolute; bottom: 1rem;
+  font-size: .65rem; letter-spacing: .2em; text-transform: uppercase;
+  background: rgba(13,27,42,.75); backdrop-filter: blur(6px);
+  color: rgba(255,255,255,.8); padding: .35rem .9rem; border-radius: 20px;
+}
+.ba-label-before { left: 1rem; }
+.ba-label-after  { right: 1rem; }
+
+/* ── FILTRO GALERÍA ── */
+.filter-btns { display: flex; gap: .6rem; flex-wrap: wrap; margin-bottom: 2rem; }
+.filter-btn {
+  font-size: .68rem; letter-spacing: .18em; text-transform: uppercase;
+  padding: .5rem 1.2rem; border-radius: 30px; cursor: none;
+  border: 1px solid rgba(201,168,76,.25); color: rgba(184,212,232,.6);
+  background: transparent;
+  transition: all .3s; font-family: 'Montserrat', sans-serif;
+}
+.filter-btn.active, .filter-btn:hover {
+  background: linear-gradient(135deg,#C9A84C,#E8C96A);
+  color: #0D1B2A; border-color: transparent;
+  box-shadow: 0 4px 14px rgba(201,168,76,.35);
+}
+.carrusel-slide { transition: opacity .4s, transform .4s, box-shadow .4s; }
+.carrusel-slide.hidden-slide { opacity: 0; pointer-events: none; position: absolute; }
+
+/* ── EXIT POPUP ── */
+#exit-popup {
+  position: fixed; inset: 0; z-index: 9000;
+  background: rgba(13,27,42,.85); backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; visibility: hidden;
+  transition: opacity .4s, visibility .4s;
+}
+#exit-popup.open { opacity: 1; visibility: visible; }
+.popup-card {
+  background: linear-gradient(135deg, #0D1B2A 0%, #162638 100%);
+  border: 1px solid rgba(201,168,76,.25);
+  border-radius: 16px; padding: 3rem 2.5rem;
+  max-width: 480px; width: 90%; text-align: center;
+  transform: scale(.9); transition: transform .45s cubic-bezier(.34,1.56,.64,1);
+  position: relative;
+  box-shadow: 0 30px 80px rgba(0,0,0,.5);
+}
+#exit-popup.open .popup-card { transform: scale(1); }
+.popup-close {
+  position: absolute; top: 1rem; right: 1rem;
+  width: 32px; height: 32px; border-radius: 50%;
+  background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1);
+  color: rgba(255,255,255,.5); font-size: .9rem;
+  display: flex; align-items: center; justify-content: center;
+  cursor: none; transition: background .3s;
+}
+.popup-close:hover { background: rgba(255,255,255,.12); }
+.popup-emoji { font-size: 2.5rem; margin-bottom: 1rem; display: block; }
+.popup-title { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 400; color: white; margin-bottom: .8rem; line-height: 1.2; }
+.popup-sub { font-size: .83rem; line-height: 1.8; color: rgba(184,212,232,.6); margin-bottom: 2rem; }
+.popup-actions { display: flex; flex-direction: column; gap: .8rem; }
+.popup-no { font-size: .7rem; letter-spacing: .15em; color: rgba(255,255,255,.25); cursor: none; background: none; border: none; font-family: 'Montserrat',sans-serif; margin-top: .5rem; transition: color .3s; }
+.popup-no:hover { color: rgba(255,255,255,.5); }
+
+/* ── TEXTURA MÁRMOL ── */
+.marble-bg {
+  position: relative;
+}
+.marble-bg::before {
+  content: '';
+  position: absolute; inset: 0; z-index: 0;
+  opacity: .035;
+  background-image:
+    repeating-linear-gradient(
+      118deg,
+      transparent 0px, transparent 8px,
+      rgba(93,173,226,.8) 8px, rgba(93,173,226,.8) 9px
+    ),
+    repeating-linear-gradient(
+      52deg,
+      transparent 0px, transparent 14px,
+      rgba(201,168,76,.6) 14px, rgba(201,168,76,.6) 15px
+    );
+  pointer-events: none;
+}
+.marble-bg > * { position: relative; z-index: 1; }
+
+/* ── CONTADOR VISITAS ── */
+#visit-counter {
+  position: fixed; bottom: 2rem; left: 2rem; z-index: 500;
+  display: flex; align-items: center; gap: .7rem;
+  background: rgba(13,27,42,.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(201,168,76,.2);
+  border-radius: 50px;
+  padding: .6rem 1.1rem;
+  transform: translateY(80px); opacity: 0;
+  transition: transform .55s cubic-bezier(.34,1.56,.64,1), opacity .55s;
+  box-shadow: 0 4px 20px rgba(0,0,0,.3);
+}
+#visit-counter.show { transform: translateY(0); opacity: 1; }
+.visit-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #C9A84C;
+  animation: visit-pulse 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+@keyframes visit-pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.7)} }
+.visit-text { font-size: .68rem; letter-spacing: .12em; color: rgba(184,212,232,.7); font-family: 'Montserrat',sans-serif; }
+.visit-num { font-family: 'Playfair Display',serif; font-size: .95rem; color: #E8C96A; font-weight: 400; }
 </style>
 </head>
 <body>
+
+<!-- CONTADOR VISITAS -->
+<div id="visit-counter">
+  <div class="visit-dot"></div>
+  <span class="visit-text"><span class="visit-num" id="visit-num">—</span> visitas</span>
+</div>
 
 <!-- LOADER -->
 <div id="loader">
@@ -296,7 +475,7 @@ tailwind.config = {
 <div id="cursor-ring"></div>
 
 <!-- WHATSAPP -->
-<a id="wa-float" href="https://wa.me/522711454228" target="_blank">
+<a id="wa-float" href="https://wa.me/522281185232" target="_blank">
   <div class="wa-pulse"></div>
   <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.554 4.118 1.528 5.845L.057 23.428a.5.5 0 0 0 .609.61l5.703-1.496A11.953 11.953 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.907 0-3.694-.5-5.24-1.375l-.376-.22-3.885 1.02 1.02-3.79-.239-.39A9.958 9.958 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
   <span>Reservar ahora</span>
@@ -325,8 +504,9 @@ tailwind.config = {
   <div class="nav-links-wrap flex items-center gap-8">
     <a href="#servicios"   class="nav-link">Servicios</a>
     <a href="#galeria"     class="nav-link">Galería</a>
-    <a href="#testimonios" class="nav-link">Reseñas</a>
-    <a href="#contacto"    class="nav-cta nav-link">Reservar</a>
+    <a href="#comentarios" class="nav-link">Reseñas</a>
+    <a href="#agendar"     class="nav-link">Citas</a>
+    <a href="#contacto"    class="nav-cta nav-link">Contacto</a>
   </div>
 </nav>
 
@@ -550,8 +730,118 @@ tailwind.config = {
     <div class="glass rounded-2xl p-8 reveal rd2">
       <div class="info-row"><span class="info-icon">🕐</span><div><p class="info-label">Horario</p><p class="info-val">Lunes – Sábado: 9:00 – 20:00<br>Domingos: 10:00 – 16:00</p></div></div>
       <div class="info-row"><span class="info-icon">🏠</span><div><p class="info-label">Servicio</p><p class="info-val">Atención a domicilio<br>Xalapa y área metropolitana</p></div></div>
-      <div class="info-row"><span class="info-icon">📱</span><div><p class="info-label">WhatsApp</p><p class="info-val">+52 271 145 4228</p></div></div>
+      <div class="info-row"><span class="info-icon">📱</span><div><p class="info-label">WhatsApp</p><p class="info-val">+52 228 118 5232</p></div></div>
       <div class="info-row" style="border-bottom:none"><span class="info-icon">📸</span><div><p class="info-label">Instagram</p><p class="info-val">@ahavah_nails.xalp</p></div></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- COMENTARIOS -->
+<section id="comentarios" style="background:#F4F8FC;" class="py-24 px-12">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-14 reveal">
+      <div class="gold-divider"></div>
+      <p class="sec-label justify-center">Reseñas de clientas</p>
+      <h2 style="font-family:'Playfair Display',serif;font-size:clamp(2rem,3vw,2.6rem);font-weight:400;color:#0D1B2A;">
+        Lo que dicen de <em class="gold-text-slow" style="font-style:italic;">nosotras</em>
+      </h2>
+    </div>
+
+    <!-- Comentarios dinámicos -->
+    <div id="comentarios-grid" class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-14">
+      <div class="test-card" style="text-align:center;color:#4A6FA5;font-size:.85rem;grid-column:1/-1;padding:2rem;">
+        Cargando reseñas...
+      </div>
+    </div>
+
+    <!-- Formulario nuevo comentario -->
+    <div class="max-w-xl mx-auto reveal">
+      <div style="background:white;border-radius:14px;border:1px solid rgba(169,204,227,.25);padding:2.5rem;box-shadow:0 4px 24px rgba(13,27,42,.07);">
+        <h3 style="font-family:'Playfair Display',serif;font-size:1.4rem;color:#0D1B2A;margin-bottom:1.5rem;text-align:center;">Deja tu reseña 💅</h3>
+        <form id="form-comentario" style="display:flex;flex-direction:column;gap:1rem;">
+          <input id="com-nombre" type="text" placeholder="Tu nombre" required
+            style="padding:.75rem 1rem;border:1px solid rgba(169,204,227,.4);border-radius:6px;font-family:'Montserrat',sans-serif;font-size:.85rem;color:#0D1B2A;outline:none;transition:border-color .3s;"
+            onfocus="this.style.borderColor='#C9A84C'" onblur="this.style.borderColor='rgba(169,204,227,.4)'">
+          <textarea id="com-texto" placeholder="¿Cómo fue tu experiencia?" required rows="4"
+            style="padding:.75rem 1rem;border:1px solid rgba(169,204,227,.4);border-radius:6px;font-family:'Montserrat',sans-serif;font-size:.85rem;color:#0D1B2A;outline:none;resize:vertical;transition:border-color .3s;"
+            onfocus="this.style.borderColor='#C9A84C'" onblur="this.style.borderColor='rgba(169,204,227,.4)'"></textarea>
+          <!-- Estrellas -->
+          <div style="display:flex;align-items:center;gap:.8rem;">
+            <span style="font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:#4A6FA5;">Calificación:</span>
+            <div id="star-selector" style="display:flex;gap:.3rem;font-size:1.5rem;cursor:none;">
+              <span class="star" data-v="1" style="color:#D6EAF8;transition:color .2s;">★</span>
+              <span class="star" data-v="2" style="color:#D6EAF8;transition:color .2s;">★</span>
+              <span class="star" data-v="3" style="color:#D6EAF8;transition:color .2s;">★</span>
+              <span class="star" data-v="4" style="color:#D6EAF8;transition:color .2s;">★</span>
+              <span class="star" data-v="5" style="color:#D6EAF8;transition:color .2s;">★</span>
+            </div>
+            <span id="star-val" style="font-size:.8rem;color:#C9A84C;">5 / 5</span>
+          </div>
+          <button type="submit" class="btn-gold" style="justify-content:center;margin-top:.5rem;">Enviar reseña</button>
+          <p id="com-msg" style="text-align:center;font-size:.8rem;min-height:1.2rem;"></p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FORMULARIO DE CITA -->
+<section id="agendar" style="background:linear-gradient(135deg,#0D1B2A,#162638);" class="py-24 px-12">
+  <div class="max-w-3xl mx-auto reveal">
+    <div class="text-center mb-12">
+      <div class="gold-divider"></div>
+      <p class="sec-label justify-center" style="color:#C9A84C;">Agenda tu cita</p>
+      <h2 style="font-family:'Playfair Display',serif;font-size:clamp(2rem,3vw,2.6rem);font-weight:400;color:white;">
+        Reserva tu lugar <em class="gold-text" style="font-style:italic;">ahora</em>
+      </h2>
+      <p style="font-size:.83rem;color:rgba(184,212,232,.55);margin-top:.8rem;">Te contactaremos para confirmar. Agenda con mínimo 24 hrs de anticipación.</p>
+    </div>
+    <div class="glass rounded-2xl p-10">
+      <form id="form-cita" style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;">
+        <div style="display:flex;flex-direction:column;gap:.4rem;">
+          <label style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:#C9A84C;">Nombre completo</label>
+          <input id="cita-nombre" type="text" placeholder="María López" required
+            style="padding:.75rem 1rem;background:rgba(255,255,255,.06);border:1px solid rgba(184,212,232,.15);border-radius:6px;color:white;font-family:'Montserrat',sans-serif;font-size:.85rem;outline:none;transition:border-color .3s;"
+            onfocus="this.style.borderColor='#C9A84C'" onblur="this.style.borderColor='rgba(184,212,232,.15)'">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.4rem;">
+          <label style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:#C9A84C;">Teléfono</label>
+          <input id="cita-tel" type="tel" placeholder="2281234567" required
+            style="padding:.75rem 1rem;background:rgba(255,255,255,.06);border:1px solid rgba(184,212,232,.15);border-radius:6px;color:white;font-family:'Montserrat',sans-serif;font-size:.85rem;outline:none;transition:border-color .3s;"
+            onfocus="this.style.borderColor='#C9A84C'" onblur="this.style.borderColor='rgba(184,212,232,.15)'">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.4rem;">
+          <label style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:#C9A84C;">Servicio</label>
+          <select id="cita-servicio" required
+            style="padding:.75rem 1rem;background:rgba(13,27,42,.9);border:1px solid rgba(184,212,232,.15);border-radius:6px;color:rgba(255,255,255,.8);font-family:'Montserrat',sans-serif;font-size:.85rem;outline:none;transition:border-color .3s;"
+            onfocus="this.style.borderColor='#C9A84C'" onblur="this.style.borderColor='rgba(184,212,232,.15)'">
+            <option value="">Selecciona un servicio</option>
+            <option value="manicure_gel">Manicure en gel — $250</option>
+            <option value="nail_art">Nail art & diseño — $350</option>
+            <option value="acrilico_polygel">Acrílico & polygel — $450</option>
+            <option value="pedicure_spa">Pedicure spa — $300</option>
+            <option value="pack_novias">Pack novias — $900</option>
+            <option value="retiro_mantenimiento">Retiro & mantenimiento — $150</option>
+          </select>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.4rem;">
+          <label style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:#C9A84C;">Fecha y hora</label>
+          <input id="cita-fecha" type="datetime-local" required
+            style="padding:.75rem 1rem;background:rgba(13,27,42,.9);border:1px solid rgba(184,212,232,.15);border-radius:6px;color:rgba(255,255,255,.8);font-family:'Montserrat',sans-serif;font-size:.85rem;outline:none;transition:border-color .3s;color-scheme:dark;"
+            onfocus="this.style.borderColor='#C9A84C'" onblur="this.style.borderColor='rgba(184,212,232,.15)'">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.4rem;grid-column:1/-1;">
+          <label style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:#C9A84C;">Notas adicionales (opcional)</label>
+          <textarea id="cita-notas" placeholder="Ej: Quiero diseño floral en color rosa..." rows="3"
+            style="padding:.75rem 1rem;background:rgba(255,255,255,.06);border:1px solid rgba(184,212,232,.15);border-radius:6px;color:white;font-family:'Montserrat',sans-serif;font-size:.85rem;outline:none;resize:vertical;transition:border-color .3s;"
+            onfocus="this.style.borderColor='#C9A84C'" onblur="this.style.borderColor='rgba(184,212,232,.15)'"></textarea>
+        </div>
+        <div style="grid-column:1/-1;display:flex;flex-direction:column;align-items:center;gap:.8rem;">
+          <button type="submit" class="btn-gold" style="width:100%;justify-content:center;">Confirmar cita</button>
+          <p id="cita-msg" style="font-size:.8rem;min-height:1.2rem;text-align:center;"></p>
+        </div>
+      </form>
     </div>
   </div>
 </section>
@@ -717,6 +1007,189 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Escape')closeLB();
   if(e.key==='ArrowRight')renderLB((ci+1)%gallery.length);
   if(e.key==='ArrowLeft')renderLB((ci-1+gallery.length)%gallery.length);
+});
+
+/* ── API BASE URL — cambia esto por tu URL de Railway ── */
+const API_URL = 'https://TU-PROYECTO.up.railway.app';
+
+/* ── CONTADOR DE VISITAS (Railway API) ── */
+(async function() {
+  try {
+    const res = await fetch(`${API_URL}/api/visitas`, { method: 'POST' });
+    const data = await res.json();
+    const visits = data.total || 0;
+
+    const el      = document.getElementById('visit-num');
+    const counter = document.getElementById('visit-counter');
+
+    // Animar número subiendo
+    let current = Math.max(0, visits - 40);
+    const step  = Math.max(1, (visits - current) / 60);
+    const timer = setInterval(() => {
+      current += step;
+      if (current >= visits) { current = visits; clearInterval(timer); }
+      el.textContent = Math.floor(current).toLocaleString('es-MX');
+    }, 16);
+
+    setTimeout(() => counter.classList.add('show'), 2200);
+  } catch(e) {
+    console.warn('API de visitas no disponible:', e.message);
+  }
+})();
+
+/* ══════════════════════════════════════════
+   INTEGRACIÓN CON RAILWAY API
+   Cambia API_URL por tu URL real de Railway
+   ══════════════════════════════════════════ */
+
+/* ── CARGAR COMENTARIOS ── */
+async function cargarComentarios() {
+  const grid = document.getElementById('comentarios-grid');
+  try {
+    const res  = await fetch(`${API_URL}/api/comentarios`);
+    const data = await res.json();
+
+    if (!data.length) {
+      grid.innerHTML = `<div style="text-align:center;color:#4A6FA5;font-size:.85rem;grid-column:1/-1;padding:2rem;">
+        Sé la primera en dejar una reseña ✨</div>`;
+      return;
+    }
+
+    grid.innerHTML = data.map(c => `
+      <div class="test-card">
+        <div style="color:#E8C96A;font-size:.75rem;letter-spacing:.15em;margin-bottom:.6rem;">
+          ${'★'.repeat(c.calificacion)}${'☆'.repeat(5 - c.calificacion)}
+        </div>
+        <div class="test-quote">"</div>
+        <p class="test-text">${c.comentario}</p>
+        <div style="display:flex;align-items:center;gap:.8rem;margin-top:1rem;">
+          <div class="av av1" style="font-size:.7rem;">${c.nombre.charAt(0).toUpperCase()}</div>
+          <div>
+            <p style="font-size:.82rem;font-weight:500;color:#0D1B2A;">${c.nombre}</p>
+            <p style="font-size:.7rem;color:#4A6FA5;">${new Date(c.created_at).toLocaleDateString('es-MX',{year:'numeric',month:'long'})}</p>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  } catch(e) {
+    grid.innerHTML = `<div style="text-align:center;color:#4A6FA5;font-size:.85rem;grid-column:1/-1;padding:2rem;">
+      No se pudieron cargar las reseñas en este momento.</div>`;
+  }
+}
+cargarComentarios();
+
+/* ── SELECTOR DE ESTRELLAS ── */
+let selectedStars = 5;
+document.querySelectorAll('.star').forEach(star => {
+  const val = parseInt(star.dataset.v);
+
+  star.addEventListener('mouseenter', () => {
+    document.querySelectorAll('.star').forEach(s =>
+      s.style.color = parseInt(s.dataset.v) <= val ? '#E8C96A' : '#D6EAF8');
+  });
+  star.addEventListener('mouseleave', () => {
+    document.querySelectorAll('.star').forEach(s =>
+      s.style.color = parseInt(s.dataset.v) <= selectedStars ? '#E8C96A' : '#D6EAF8');
+  });
+  star.addEventListener('click', () => {
+    selectedStars = val;
+    document.getElementById('star-val').textContent = `${val} / 5`;
+    document.querySelectorAll('.star').forEach(s =>
+      s.style.color = parseInt(s.dataset.v) <= val ? '#E8C96A' : '#D6EAF8');
+  });
+});
+// Inicializar 5 estrellas
+document.querySelectorAll('.star').forEach(s => s.style.color = '#E8C96A');
+
+/* ── ENVIAR COMENTARIO ── */
+document.getElementById('form-comentario').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const msg   = document.getElementById('com-msg');
+  const btn   = e.target.querySelector('button');
+  const nombre    = document.getElementById('com-nombre').value.trim();
+  const comentario = document.getElementById('com-texto').value.trim();
+
+  btn.textContent = 'Enviando...';
+  btn.disabled = true;
+  msg.style.color = '#4A6FA5';
+  msg.textContent = '';
+
+  try {
+    const res = await fetch(`${API_URL}/api/comentarios`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nombre, comentario, calificacion: selectedStars })
+    });
+    const data = await res.json();
+
+    if (res.ok) {
+      msg.style.color = '#2D7A4F';
+      msg.textContent = '✓ ' + data.message;
+      e.target.reset();
+      selectedStars = 5;
+      document.querySelectorAll('.star').forEach(s => s.style.color = '#E8C96A');
+      document.getElementById('star-val').textContent = '5 / 5';
+    } else {
+      msg.style.color = '#C0392B';
+      msg.textContent = '✗ ' + (data.error || 'Error al enviar');
+    }
+  } catch(err) {
+    msg.style.color = '#C0392B';
+    msg.textContent = '✗ No se pudo conectar con el servidor';
+  } finally {
+    btn.textContent = 'Enviar reseña';
+    btn.disabled = false;
+  }
+});
+
+/* ── ENVIAR CITA ── */
+document.getElementById('form-cita').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const msg = document.getElementById('cita-msg');
+  const btn = e.target.querySelector('button[type="submit"]');
+
+  const nombre    = document.getElementById('cita-nombre').value.trim();
+  const telefono  = document.getElementById('cita-tel').value.trim();
+  const servicio  = document.getElementById('cita-servicio').value;
+  const fechaLocal = document.getElementById('cita-fecha').value;
+  const notas     = document.getElementById('cita-notas').value.trim();
+
+  if (!servicio) {
+    msg.style.color = '#C0392B';
+    msg.textContent = '✗ Por favor selecciona un servicio';
+    return;
+  }
+
+  // Convertir datetime-local a ISO
+  const fecha_hora = new Date(fechaLocal).toISOString();
+
+  btn.textContent = 'Agendando...';
+  btn.disabled = true;
+  msg.textContent = '';
+
+  try {
+    const res = await fetch(`${API_URL}/api/citas`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nombre, telefono, servicio, fecha_hora, notas: notas || undefined })
+    });
+    const data = await res.json();
+
+    if (res.ok) {
+      msg.style.color = '#2D7A4F';
+      msg.textContent = '✓ ' + data.message;
+      e.target.reset();
+    } else {
+      msg.style.color = '#C0392B';
+      msg.textContent = '✗ ' + (data.error || 'Error al agendar');
+    }
+  } catch(err) {
+    msg.style.color = '#C0392B';
+    msg.textContent = '✗ No se pudo conectar con el servidor';
+  } finally {
+    btn.textContent = 'Confirmar cita';
+    btn.disabled = false;
+  }
 });
 </script>
 </body>
