@@ -199,17 +199,7 @@ tailwind.config = {
   .carr-btn:hover { background:rgba(201,168,76,.15); transform:scale(1.1); box-shadow:0 4px 16px rgba(201,168,76,.2); }
   .carr-dot { width:6px; height:6px; border-radius:50%; background:rgba(201,168,76,.25); cursor:none; transition:background .3s,transform .3s; }
   .carr-dot.active { background:#C9A84C; transform:scale(1.6); }
-
-  /* ── TESTIMONIALS ── */
-  .test-card { background:white; border-radius:12px; padding:2rem; border:1px solid rgba(169,204,227,.2); box-shadow:0 2px 16px rgba(13,27,42,.05); transition:transform .3s,box-shadow .3s,border-color .3s; }
-  .test-card:hover { transform:translateY(-5px); box-shadow:0 16px 40px rgba(13,27,42,.1); border-color:rgba(201,168,76,.3); }
-  .test-quote { font-family:'Playfair Display',serif; font-size:4rem; line-height:.4; color:#E8C96A; margin-bottom:1rem; }
-  .test-text { font-family:'Cormorant Garamond',serif; font-size:1.1rem; font-weight:300; font-style:italic; line-height:1.85; color:#4A6FA5; margin-bottom:1.5rem; }
-  .av { width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:.75rem; font-weight:600; flex-shrink:0; }
-  .av1 { background:linear-gradient(135deg,#D6EAF8,#A9CCE3); color:#1A2F45; }
-  .av2 { background:linear-gradient(135deg,#EBF5FB,#D6EAF8); color:#5DADE2; border:1px solid #A9CCE3; }
-  .av3 { background:linear-gradient(135deg,#1A2F45,#0D1B2A); color:white; }
-
+  
   /* ── LIGHTBOX ── */
   #lightbox { position:fixed; inset:0; z-index:5000; background:rgba(13,27,42,.97); display:flex; align-items:center; justify-content:center; opacity:0; visibility:hidden; transition:opacity .4s,visibility .4s; cursor:none; }
   #lightbox.open { opacity:1; visibility:visible; }
@@ -686,24 +676,6 @@ tailwind.config = {
         <div class="flex gap-2 items-center" id="carr-dots"></div>
         <button class="carr-btn" id="carr-next">&#8594;</button>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- TESTIMONIALS -->
-<section id="testimonios" class="py-28 px-12 bg-white">
-  <div class="max-w-7xl mx-auto">
-    <div class="text-center mb-16 reveal">
-      <div class="gold-divider"></div>
-      <p class="sec-label justify-center">Testimonios</p>
-      <h2 style="font-family:'Playfair Display',serif;font-size:clamp(2rem,3.5vw,2.8rem);font-weight:400;color:#0D1B2A;">
-        Lo que dicen<br>nuestras <em class="gold-text-slow" style="font-style:italic;">clientas</em>
-      </h2>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div class="test-card reveal rd1"><div style="color:#E8C96A;font-size:.75rem;letter-spacing:.15em;margin-bottom:.8rem;">★★★★★</div><div class="test-quote">"</div><p class="test-text">Nunca había encontrado un lugar donde me sintiera tan cómoda. El nail art quedó exactamente como lo imaginé, ¡incluso mejor!</p><div class="flex items-center gap-3"><div class="av av1">SA</div><div><p style="font-size:.82rem;font-weight:500;">Sofía Álvarez</p><p style="font-size:.72rem;color:#4A6FA5;">Clienta frecuente</p></div></div></div>
-      <div class="test-card reveal rd2"><div style="color:#E8C96A;font-size:.75rem;letter-spacing:.15em;margin-bottom:.8rem;">★★★★★</div><div class="test-quote">"</div><p class="test-text">El pack de novias fue perfecto. Mis uñas lucieron impecables todo el día y el masaje de pedicure fue un regalo para el alma.</p><div class="flex items-center gap-3"><div class="av av2">MR</div><div><p style="font-size:.82rem;font-weight:500;">Mariana Reyes</p><p style="font-size:.72rem;color:#4A6FA5;">Novia 2024</p></div></div></div>
-      <div class="test-card reveal rd3"><div style="color:#E8C96A;font-size:.75rem;letter-spacing:.15em;margin-bottom:.8rem;">★★★★★</div><div class="test-quote">"</div><p class="test-text">Llevo 8 meses viniendo cada mes. La calidad del gel es increíble, me dura mucho y el trato es siempre muy amable y profesional.</p><div class="flex items-center gap-3"><div class="av av3">VL</div><div><p style="font-size:.82rem;font-weight:500;">Valentina López</p><p style="font-size:.72rem;color:#4A6FA5;">VIP desde 2023</p></div></div></div>
     </div>
   </div>
 </section>
